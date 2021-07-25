@@ -4,6 +4,9 @@ MAINTAINER Daniel Mundt "post@danielmundt.de"
 COPY . /app
 WORKDIR /app
 
-RUN python -m pip install -r requirements.txt
+ENV FLASK_APP=httpproxy.py
+ENV FLASK_RUN_HOST=0.0.0.0
+EXPOSE 5000
 
-ENTRYPOINT /app/entrypoint.sh
+RUN python -m pip install -r requirements.txt
+CMD ["flask", "run"]

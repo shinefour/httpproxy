@@ -1,5 +1,5 @@
 APP_NAME=htmlproxy
-PORT=8085
+HTTP_PORT ?= 8080
 
 .PHONY: help
 
@@ -11,5 +11,6 @@ help:
 build: ## Build the container
 	docker build -t $(APP_NAME) .
 
-run: ## Run the app
+run: ## Run the app. Add HTTP_PORT=<PORT> to overwrite default (8080)
+	export HTTP_PORT=${HTTP_PORT}
 	docker-compose up

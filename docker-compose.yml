@@ -2,3 +2,9 @@ version: '3.7'
 services:
   htmlproxy:
     image: htmlproxy:latest
+    ports:
+      - "${HTTP_PORT}:5000"
+    volumes:
+      - ".:/app"
+  redis:
+    image: "redis:alpine"
