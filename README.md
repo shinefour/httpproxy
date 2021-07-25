@@ -1,5 +1,5 @@
 # Tasks
 
-* set up basic git repository
-* set up docker
-* set up Makefile
+* ~~set up basic git repository~
+* ~~set up Docker~~
+* ~~set up Makefile~~
