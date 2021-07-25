@@ -12,4 +12,4 @@ RUN python -m pip install -r requirements.txt
 COPY . /app
 WORKDIR /app
 
-CMD ["flask", "run"]
+CMD ["python", "httpproxy.py"]

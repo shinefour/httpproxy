@@ -7,6 +7,6 @@
 * ~~/status endpoint~~
 * ~~proxy with jwt token~
 * check compatability with RFC21616
-* async (async by using an async webserver vs async views)
+* ~~async (async by using an async webserver vs async views)~~ -> using meinheld as async server
 * test covering
 * test script in Makefile

@@ -4,7 +4,7 @@ services:
     image: htmlproxy:latest
     ports:
       - "${HTTP_PORT}:5000"
-    volumes:
-      - ".:/app"
+    # volumes:
+    #   - ".:/app"
   redis:
     image: "redis:alpine"

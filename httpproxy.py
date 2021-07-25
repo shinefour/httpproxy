@@ -13,6 +13,7 @@ import json
 import jwt
 import random
 import requests
+from meinheld import server
 
 app = Flask(__name__)
 cache = redis.Redis(host='redis', port=6379)
@@ -91,3 +92,8 @@ def status():
         mimetype='application/json'
     )
     return response
+
+
+if __name__ == '__main__':
+    server.listen(("0.0.0.0", 5000))
+    server.run(app)
