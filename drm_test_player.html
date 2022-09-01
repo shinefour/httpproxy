@@ -1,0 +1,88 @@
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
+    <script src="https://unpkg.com/video.js/dist/video.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/videojs-contrib-eme@4.0.1/dist/videojs-contrib-eme.min.js"></script>
+</head>
+
+<body>
+    <video-js id="video" class="vjs-default-skin" controls height="480"></video-js>
+
+    <script>
+        var player = videojs("video", { muted: 1 });
+        player.eme();
+
+        var headers = {
+            // when testing with a proxy, this can be omitted
+            // "x-dt-custom-data": "" // base64 of {"userId":"", "merchant":"", "sessionId":""}
+        };
+
+        const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+               navigator.userAgent &&
+               navigator.userAgent.indexOf('CriOS') == -1 &&
+               navigator.userAgent.indexOf('FxiOS') == -1;
+
+        const playback_url = (isSafari ?
+            "https://www.danielmundt.de/container_3/manifest.m3u8" :
+            "https://www.danielmundt.de/container_3/manifest.mpd");
+
+
+        player.src({
+            src: playback_url,
+            keySystems: {
+                "com.widevine.alpha": {
+                    // url: "https://lic.staging.drmtoday.com/license-proxy-widevine/cenc/?specConform=true",
+                    url: 'https://1544-94-31-106-167.eu.ngrok.io/Widevine',
+                    licenseHeaders: headers
+                },
+                "com.microsoft.playready": {
+                    // url: "https://lic.staging.drmtoday.com/license-proxy-headerauth/drmtoday/RightsManager.asmx",
+                    url: 'https://1544-94-31-106-167.eu.ngrok.io/PlayReady',
+                    licenseHeaders: headers
+                },
+                "com.apple.fps.1_0": {
+                    getContentId: function (emeOptions, initData) {
+                        return initData;
+                    },
+                    getCertificate: function(emeOptions, callback) {
+                        videojs.xhr(
+                            {
+                                url: "https://lic.staging.drmtoday.com/license-server-fairplay/cert/###merchant###",
+                                method: "GET",
+                                responseType: "arraybuffer",
+                            },
+                            (err, response, responseBody) => {
+                                callback(null, new Uint8Array(responseBody));
+                            }
+                        );
+                    },
+                    getLicense: function (emeOptions, contentId, keyMessage, callback) {
+                        videojs.xhr(
+                            {
+                                // url: "https://lic.staging.drmtoday.com/license-server-fairplay/",
+                                url: "https://1544-94-31-106-167.eu.ngrok.io/FairPlay",
+                                method: "POST",
+                                responseType: "text",
+                                body: keyMessage,
+                                headers: {
+                                    ...headers
+                                }
+                            },
+                            (err, response, responseBody) => {
+                                let rawLicenseString = atob(responseBody);
+                                let data = new Uint8Array(rawLicenseString.length);
+                                for (let i = 0; i < rawLicenseString.length; ++i) {
+                                    data[i] = rawLicenseString.charCodeAt(i);
+                                }
+                                let key = data.buffer;
+                                callback(null, key);
+                            }
+                        );
+                    }
+                }
+            }
+        });
+        player.play();
+    </script>
+</body>
