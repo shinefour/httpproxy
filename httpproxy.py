@@ -16,10 +16,11 @@ app = Flask(__name__)
 def create_opt_data():
     opt_data = {
         'userId': 'purchase',
-        'merchant': '###merchant###',
+        'merchant': 'bibeltv',
         'sessionId': 'proxy'
     }
-    return str(base64.urlsafe_b64encode(json.dumps(opt_data).encode()).decode())
+    return "eyJ1c2VySWQiOiJwdXJjaGFzZSIsICJtZXJjaGFudCI6ImJpYmVsdHYiLCAic2Vzc2lvbklkIjoicHJveHkifQ"
+    # return str(base64.urlsafe_b64encode(json.dumps(opt_data).encode()).decode())
 
 
 @app.route('/<path:drm_system>', methods=['POST', 'OPTIONS'])
@@ -29,9 +30,9 @@ def root(drm_system):
 
     if drm_system == 'Widevine':
         url = 'https://lic.staging.drmtoday.com/license-proxy-widevine/cenc/?specConform=true'
-    elif drm_system == 'FairPlay':
-        url = 'https://lic.staging.drmtoday.com/license-proxy-headerauth/drmtoday/RightsManager.asmx'
     elif drm_system == 'PlayReady':
+        url = 'https://lic.staging.drmtoday.com/license-proxy-headerauth/drmtoday/RightsManager.asmx'
+    elif drm_system == 'FairPlay':
         url = 'https://lic.staging.drmtoday.com/license-server-fairplay/'
     else:
         raise Exception("Invalid drm system (one of: Widevine, PlayReady, FairPlay)")
