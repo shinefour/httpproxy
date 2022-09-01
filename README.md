@@ -1,12 +1,4 @@
-# Tasks
-
-* ~~set up basic git repository~~
-* ~~set up Docker~~
-* ~~set up Makefile~~
-* ~~HTTP_PORT env variable~~
-* ~~/status endpoint~~
-* ~~proxy with jwt token~~
-* check compatability with RFC21616
-* ~~async (async by using an async webserver vs async views)~~ -> using meinheld as async server
-* test covering
-* test script in Makefile
+# Setup
+* install the Flask app
+* make sure to add your merchant code in the httpproxy.py file
+* run `python3 httpproxy.py`
