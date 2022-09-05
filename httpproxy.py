@@ -10,23 +10,25 @@ from meinheld import server
 import base64
 import json
 
+
+DEBUG = True
 app = Flask(__name__)
 
 
-def create_opt_data():
+def get_b64_opt_data():
     opt_data = {
         'userId': 'purchase',
         'merchant': 'bibeltv',
         'sessionId': 'proxy'
     }
-    return "eyJ1c2VySWQiOiJwdXJjaGFzZSIsICJtZXJjaGFudCI6ImJpYmVsdHYiLCAic2Vzc2lvbklkIjoicHJveHkifQ"
-    # return str(base64.urlsafe_b64encode(json.dumps(opt_data).encode()).decode())
+    code = str(base64.urlsafe_b64encode(json.dumps(opt_data).encode()).decode())
+    return f"{code}{'=' * ((4 - len(code) % 4) % 4)}"
 
 
 @app.route('/<path:drm_system>', methods=['POST', 'OPTIONS'])
 def root(drm_system):
     new_headers = {key: value for (key, value) in request.headers}
-    new_headers['x-dt-custom-data'] = create_opt_data()
+    new_headers['x-dt-custom-data'] = get_b64_opt_data()
 
     if drm_system == 'Widevine':
         url = 'https://lic.staging.drmtoday.com/license-proxy-widevine/cenc/?specConform=true'
