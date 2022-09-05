@@ -21,7 +21,7 @@ def get_b64_opt_data():
         'merchant': 'bibeltv',
         'sessionId': 'proxy'
     }
-    code = str(base64.urlsafe_b64encode(json.dumps(opt_data).encode()).decode())
+    code = str(base64.b64encode(json.dumps(opt_data).encode()).decode())
     return f"{code}{'=' * ((4 - len(code) % 4) % 4)}"
 
 
